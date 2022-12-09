@@ -5,16 +5,3 @@ terraform {
     region = "us-east-1"
   }
 }
-
-resource "aws_s3_bucket" "test-bucket" {
-  bucket = "test-bucket-a8f5f167f44f4964e"
-
-  tags = {
-    Name = "My bucket"
-  }
-}
-
-resource "aws_s3_bucket_acl" "test-bucket-acl" {
-  bucket = aws_s3_bucket.test-bucket.id
-  acl    = "private"
-}
