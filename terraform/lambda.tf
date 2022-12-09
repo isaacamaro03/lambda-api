@@ -17,7 +17,14 @@ resource "aws_iam_role" "lambda-role" {
 EOF
 }
 
+data "archive_file" "dummy-lambda-code" {
+  type        = "zip"
+  output_path = "${path.module}/dummy_lambda_function.zip"
+  source_dir  = "${path.module}/src"
+}
+
 resource "aws_lambda_function" "minimal-api-lambda" {
+  filename      = data.archive_file.dummy-lambda-code.output_path
   function_name = "minimal-api"
   role          = aws_iam_role.lambda-role.arn
   handler       = "lambda-api"
