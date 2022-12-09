@@ -20,7 +20,11 @@ EOF
 data "archive_file" "dummy-lambda-code" {
   type        = "zip"
   output_path = "${path.module}/dummy_lambda_function.zip"
-  source_dir  = "${path.module}/src"
+
+  source {
+    content  = "hello"
+    filename = "dummy.txt"
+  }
 }
 
 resource "aws_lambda_function" "minimal-api-lambda" {
