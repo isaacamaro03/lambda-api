@@ -32,6 +32,7 @@ jobs:
     
     - name: Create artifact
       run: |
+        cd publish
         zip -r artifact.zip .
     
     - name: Upload artifact to AWS
