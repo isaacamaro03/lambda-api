@@ -33,8 +33,8 @@ jobs:
     - name: Create artifact
       run: |
         cd publish
-        zip -r artifact.zip .
+        zip -r ..\artifact.zip .
     
     - name: Upload artifact to AWS
       run: |
-        aws lambda update-function-code --function-name minimal-api --zip-file fileb://artifact.zip
+        aws lambda update-function-code --function-name minimal-api --zip-file fileb://publish/artifact.zip
