@@ -1,0 +1,39 @@
+name: 'AWS Lambda deploy'
+
+on:
+  push:
+    branches: ['master']
+    paths-ignore:
+    - 'terraform/**'
+
+jobs:
+  deploy-lambda:
+    name: 'Deploy Lambda'
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials Action For GitHub Actions
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_GITHUB_DEPLOY_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_GITHUB_DEPLOY_SECRET_KEY }}
+        aws-region: us-west-1
+
+    - name: Publish .NET
+      run: |
+        dotnet publish -c Release --self-contained false -r linux-x64 -o publish
+    
+    - name: Create artifact
+      run: |
+        zip -r artifact.zip .
+    
+    - name: Upload artifact to AWS
+      run: |
+        aws lambda update-function-code --function-name minimal-api --zip-file fileb://artifact.zip
